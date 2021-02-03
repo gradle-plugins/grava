@@ -1,0 +1,4 @@
+allprojects {
+	group = 'dev.gradleplugins'
+	version = '1.0'
+}

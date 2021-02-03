@@ -1,0 +1,40 @@
+plugins {
+    id 'java-library'
+	id 'dev.nokee.experimental.bintray-publish' version '0.5.0-430640a7'
+}
+
+repositories {
+    jcenter()
+    maven { url = 'https://dl.bintray.com/gradle-plugins/distributions' }
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+	implementation 'com.google.code.gson:gson:2.8.6'
+
+    compileOnly gradleApi('6.2.1')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+tasks.withType(Test).configureEach {useJUnitPlatform() }
+
+publishing {
+	publications {
+		library(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		mavenLocal()
+		maven {
+			name = 'bintray'
+			url = 'https://dl.bintray.com/gradle-plugins/distributions'
+			ext.packageName = 'dev.gradleplugins:grava'
+			credentials(PasswordCredentials)
+		}
+	}
+}
