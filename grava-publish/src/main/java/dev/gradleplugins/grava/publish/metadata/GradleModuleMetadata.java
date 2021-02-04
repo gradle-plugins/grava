@@ -61,9 +61,7 @@ public class GradleModuleMetadata {
 		String buildId;
 	}
 
-	public interface Variant {
-
-	}
+	public interface Variant {}
 
 	@Value
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
