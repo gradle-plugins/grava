@@ -5,7 +5,7 @@ plugins {
 
 repositories {
     jcenter()
-    maven { url = 'https://repo.nokeedev.net/release' }
+    gradlePluginDevelopment()
 }
 
 dependencies {
