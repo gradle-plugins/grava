@@ -29,6 +29,29 @@ publishing {
 	publications {
 		library(MavenPublication) {
 			from components.java
+			pom {
+				name = "${groupId}:${artifactId}"
+				description = project.description
+				inceptionYear = '2021'
+				url = 'https://github.com/gradle-plugins/grava'
+				scm {
+					connection = 'scm:git:git://github.com/gradle-plugins/grava.git'
+					developerConnection = 'scm:git:ssh://github.com:gradle-plugins/grava.git'
+					url = 'http://github.com/gradle-plugins/grava/tree/main'
+				}
+				developers {
+					developer {
+						name = 'Daniel Lacasse'
+						id = 'lacasseio'
+					}
+				}
+				licenses {
+					license {
+						name = 'Apache License, Version 2.0'
+						url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+			}
 		}
 	}
 	repositories {
