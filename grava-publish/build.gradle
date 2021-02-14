@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
-	id 'dev.nokee.experimental.bintray-publish' version '0.5.0-430640a7'
+	id 'maven-publish'
 }
 
 repositories {
     jcenter()
-    maven { url = 'https://dl.bintray.com/gradle-plugins/distributions' }
+    maven { url = 'https://repo.nokeedev.net/release' }
 }
 
 dependencies {
@@ -34,9 +34,8 @@ publishing {
 	repositories {
 		mavenLocal()
 		maven {
-			name = 'bintray'
-			url = 'https://dl.bintray.com/gradle-plugins/distributions'
-			ext.packageName = 'dev.gradleplugins:grava'
+			name = 'nokeeRelease'
+			url = providers.gradleProperty("${name}Url").forUseAtConfigurationTime().orElse('')
 			credentials(PasswordCredentials)
 		}
 	}
