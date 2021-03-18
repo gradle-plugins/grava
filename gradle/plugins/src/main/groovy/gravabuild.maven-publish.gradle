@@ -1,0 +1,56 @@
+plugins {
+	id 'maven-publish'
+	id 'signing'
+}
+
+publishing {
+	publications.withType(MavenPublication).all {
+		pom {
+			name = provider { "${groupId}:${artifactId}" }
+			description = provider { project.description }
+			inceptionYear = '2021'
+			url = 'https://github.com/gradle-plugins/grava'
+			scm {
+				connection = 'scm:git:git://github.com/gradle-plugins/grava.git'
+				developerConnection = 'scm:git:ssh://github.com:gradle-plugins/grava.git'
+				url = 'http://github.com/gradle-plugins/grava/tree/main'
+			}
+			developers {
+				developer {
+					name = 'Daniel Lacasse'
+					id = 'lacasseio'
+				}
+			}
+			licenses {
+				license {
+					name = 'Apache License, Version 2.0'
+					url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+				}
+			}
+		}
+	}
+	repositories {
+		mavenLocal()
+		maven {
+			name = 'nokeeRelease'
+			url = providers.gradleProperty("${name}Url").forUseAtConfigurationTime().orElse('')
+			credentials(AwsCredentials)
+		}
+	}
+}
+
+pluginManager.withPlugin('java-library') {
+	publishing.publications.create('library', MavenPublication) {
+		from components.java
+	}
+}
+
+signing {
+	sign publishing.publications
+	if (!project.hasProperty('signing.secretKeyRingFile')) {
+		def signingKeyId = findProperty("signing.keyId").toString()
+		def signingKey = findProperty("signing.key").toString()
+		def signingPassword = findProperty("signing.password").toString()
+		useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+	}
+}

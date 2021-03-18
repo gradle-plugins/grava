@@ -4,4 +4,6 @@ plugins {
 
 rootProject.name = 'grava'
 
+includeBuild('gradle/plugins')
+
 include('grava-publish')
