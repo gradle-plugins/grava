@@ -38,8 +38,8 @@ import static java.util.stream.Collectors.joining;
  * A JUnit rule which provides a unique temporary folder for the test.
  *
  * Note: to avoid 260 char path length limitation on Windows, we should keep the test dir path as short as possible,
- * ideally < 90 chars (from repo root to test dir root, e.g. "core/build/tmp/test files/{TestClass}/{testMethod}/qqlj8"),
- * or < 40 chars for "{TestClass}/{testMethod}/qqlj8"
+ * ideally {@literal <} 90 chars (from repo root to test dir root, e.g. "core/build/tmp/test files/{TestClass}/{testMethod}/qqlj8"),
+ * or {@literal <} 40 chars for "{TestClass}/{testMethod}/qqlj8"
  */
 abstract class AbstractTestDirectoryProvider implements TestDirectoryProvider, AutoCloseable {
 	protected final Path root;
