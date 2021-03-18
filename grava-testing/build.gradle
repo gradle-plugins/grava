@@ -1,0 +1,38 @@
+plugins {
+	id 'java-library'
+	id 'gravabuild.maven-publish'
+}
+
+repositories {
+	mavenCentral()
+	gradlePluginDevelopment()
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+	implementation gradleRunnerKit()
+	implementation 'org.hamcrest:hamcrest-core:2.2'
+	compileOnly('org.junit.jupiter:junit-jupiter-api:5.7.1') {
+		because 'DynamicTest usage in TestCaseUtils'
+	}
+	implementation('org.opentest4j:opentest4j:1.2.0') {
+		because 'TestAbortedException for JUnit compatible assumeTrue/assumeFalse'
+	}
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'commons-io:commons-io:2.8.0'
+	compileOnly gradleApi('6.2.1')
+
+	testImplementation gradleApi('6.2.1')
+	testCompileOnly 'org.projectlombok:lombok:1.18.16'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+	testImplementation 'org.hamcrest:hamcrest-core:2.2'
+	testImplementation 'org.mockito:mockito-core:3.8.0'
+
+}
+
+tasks.withType(Test).configureEach {useJUnitPlatform() }
