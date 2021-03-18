@@ -7,3 +7,4 @@ rootProject.name = 'grava'
 includeBuild('gradle/plugins')
 
 include('grava-publish')
+include('grava-testing')
