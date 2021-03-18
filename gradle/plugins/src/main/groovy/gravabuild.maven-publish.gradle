@@ -29,14 +29,6 @@ publishing {
 			}
 		}
 	}
-	repositories {
-		mavenLocal()
-		maven {
-			name = 'nokeeRelease'
-			url = providers.gradleProperty("${name}Url").forUseAtConfigurationTime().orElse('')
-			credentials(AwsCredentials)
-		}
-	}
 }
 
 pluginManager.withPlugin('java-library') {
