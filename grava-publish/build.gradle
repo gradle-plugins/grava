@@ -1,26 +1,11 @@
 plugins {
-    id 'java-library'
+    id 'gravabuild.java-library'
 	id 'gravabuild.maven-publish'
 }
 
-repositories {
-    mavenCentral()
-    gradlePluginDevelopment()
-}
+description = 'Publish helper classes for Gradle plugin development'
 
 dependencies {
-	compileOnly 'org.projectlombok:lombok:1.18.16'
-	annotationProcessor 'org.projectlombok:lombok:1.18.16'
-
 	implementation 'com.google.code.gson:gson:2.8.6'
-
     compileOnly gradleApi('6.2.1')
-
-	testCompileOnly 'org.projectlombok:lombok:1.18.16'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-	testImplementation 'org.hamcrest:hamcrest-core:2.2'
 }
-
-tasks.withType(Test).configureEach {useJUnitPlatform() }
