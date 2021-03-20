@@ -6,7 +6,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 /**
- * A JUnit rule which provides a unique temporary folder for the test.
+ * A file fixture which provides a unique temporary folder for the test.
  */
 public final class TestNameTestDirectoryProvider extends AbstractTestDirectoryProvider {
 	public TestNameTestDirectoryProvider(Class<?> klass) {

@@ -51,18 +51,43 @@ public final class ProjectTestUtils {
 		return _use_project_method;
 	}
 
+	/**
+	 * Returns an functional {@link ObjectFactory} instance.
+	 *
+	 * The project associated to the returned ObjectFactory is unspecified meaning tests should not depend on it.
+	 * This particularity means that each file related operation that would spawn from this ObjectFactory will be resolved from an unspecified, but valid, file system location.
+	 * If the file resolution needs to be specified, create a {@link Project} instance using {@link #createRootProject(File)}.
+	 *
+	 * @return a {@link ObjectFactory} instance, never null
+	 */
 	public static ObjectFactory objectFactory() {
 		return project().getObjects();
 	}
 
+	/**
+	 * Returns a functional {@link ProviderFactory} instance.
+	 *
+	 * @return a {@link ProviderFactory} instance, never null
+	 */
 	public static ProviderFactory providerFactory() {
 		return project().getProviders();
 	}
 
+	/**
+	 * Creates a {@link Dependency} instance for the specified notation.
+	 *
+	 * @param notation  dependency notation, must not be null
+	 * @return a {@link Dependency} instance for the notation, never null
+	 */
 	public static Dependency createDependency(Object notation) {
 		return project().getDependencies().create(notation);
 	}
 
+	/**
+	 * Creates a new root project instance.
+	 *
+	 * @return a new {@link Project} instance, never null
+	 */
 	public static Project rootProject() {
 		maybeRegisterCleanup();
 		val testDirectory = new TestNameTestDirectoryProvider(ProjectTestUtils.class);
@@ -70,6 +95,12 @@ public final class ProjectTestUtils {
 		return ProjectBuilder.builder().withProjectDir(testDirectory.getTestDirectory().toFile()).build();
 	}
 
+	/**
+	 * Creates a new root project instance for the given project directory.
+	 *
+	 * @param rootDirectory  a project directory for the root project, must not be null
+	 * @return a new {@link Project} instance, never null
+	 */
 	public static Project createRootProject(File rootDirectory) {
 		return ProjectBuilder
 			.builder()
@@ -77,6 +108,13 @@ public final class ProjectTestUtils {
 			.build();
 	}
 
+	/**
+	 * Creates a child project instance with the specified parent project.
+	 * The child project name and directory defaults to {@literal test} and <pre>${parent.projectDir}/test</pre> respectively.
+	 *
+	 * @param parent  the parent project for the child project, must not be null
+	 * @return a new child {@link Project} instance of the specified parent project, never null
+	 */
 	public static Project createChildProject(Project parent) {
 		return ProjectBuilder
 			.builder()
@@ -84,6 +122,14 @@ public final class ProjectTestUtils {
 			.build();
 	}
 
+	/**
+	 * Creates a child project instance with the specified parent project and name.
+	 * The child project directory defaults to <pre>${parent.projectDir}/${name}</pre>.
+	 *
+	 * @param parent  the parent project for the child project, must not be null
+	 * @param name  the child project name, must not be null
+	 * @return a new child {@link Project} instance of the specified parent project, never null
+	 */
 	public static Project createChildProject(Project parent, String name) {
 		return ProjectBuilder
 			.builder()
@@ -92,6 +138,14 @@ public final class ProjectTestUtils {
 			.build();
 	}
 
+	/**
+	 * Creates a child project instance with the specified parent project, name and directory.
+	 *
+	 * @param parent  the parent project for the child project, must not be null
+	 * @param name  the child project name, must not be null
+	 * @param projectDirectory  the child project directory, must not be null
+	 * @return a new child {@link Project} instance of the specified parent project, never null
+	 */
 	public static Project createChildProject(Project parent, String name, File projectDirectory) {
 		return ProjectBuilder
 			.builder()
@@ -101,6 +155,16 @@ public final class ProjectTestUtils {
 			.build();
 	}
 
+	/**
+	 * Force the evaluation of the specified Gradle project.
+	 * It will execute all {@link Project#afterEvaluate(Action)} configuration action.
+	 *
+	 * Note: It is generally preferable to write functional test using Gradle Runner Kit to test after evaluate behavior.
+	 *
+	 * @implNote It uses a call to an internal Gradle API, e.g. {@link ProjectInternal#evaluate()}.
+	 * @param project  the project to evaluate, must not be null
+	 * @return the specified project, never null
+	 */
 	public static Project evaluate(Project project) {
 		return ((ProjectInternal) project).evaluate();
 	}
