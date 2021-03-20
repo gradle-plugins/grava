@@ -46,7 +46,7 @@ public final class ProjectTestUtils {
 
 	private static Project project() {
 		if (_use_project_method == null) {
-			_use_project_method = ProjectBuilder.builder().build();
+			_use_project_method = rootProject();
 		}
 		return _use_project_method;
 	}
