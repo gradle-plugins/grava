@@ -23,7 +23,7 @@ import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isA;
 
-public final class WellBehavedPluginTester {
+public final class WellBehavedPluginTester extends AbstractTester {
 	private String qualifiedPluginId;
 	private Class<? extends Plugin<?>> pluginType;
 
@@ -51,50 +51,23 @@ public final class WellBehavedPluginTester {
 		return this;
 	}
 
-	private Collection<TestCase> getTesters() {
-		val testers = new ArrayList<TestCase>();
-		testers.add(new AppliedPluginIdIsExpectedType());
-		testers.add(new CanApplyByIdViaPluginDsl());
-		testers.add(new CanApplyPluginByIdUsingProjectApply());
-		testers.add(new CanApplyPluginByTypeUsingProjectApply());
-		testers.add(new CanExecuteHelpTask());
-		testers.add(new CanExecuteTasksTask());
-		testers.add(new DoesNotRealizeTask());
-		return testers;
+	// TODO: We should make sure that some tests aren't ignored if we only provide plugin type or id
+	// TODO: Support settings plugin testing (still make sure the tasks in root project are not realized)
+	protected void collectTesters(List<TestCase> testCases) {
+		testCases.add(new AppliedPluginIdIsExpectedType());
+		testCases.add(new CanApplyByIdViaPluginDsl());
+		testCases.add(new CanApplyPluginByIdUsingProjectApply());
+		testCases.add(new CanApplyPluginByTypeUsingProjectApply());
+		testCases.add(new CanExecuteHelpTask());
+		testCases.add(new CanExecuteTasksTask());
+		testCases.add(new DoesNotRealizeTask());
 	}
 
 	public void testWellBehavedPlugin() {
 		if (qualifiedPluginId == null && pluginType == null) {
 			throw new AssertionError("Missing qualified plugin id and/or plugin type");
 		}
-		val failures = new ArrayList<TestCaseFailure>();
-		stream().forEach(testCase -> {
-			try {
-				testCase.setUp();
-				try {
-					testCase.execute();
-				} finally {
-					testCase.tearDown();
-				}
-			} catch (TestAbortedException ex) {
-				// ignore test
-			} catch (Throwable throwable) {
-				failures.add(new TestCaseFailure(testCase.getDisplayName(), throwable));
-			}
-		});
-		if (!failures.isEmpty()) {
-			throw new MultipleFailuresError("Plugin is not well-behaved", failures);
-		}
-	}
-
-	public static final class TestCaseFailure extends RuntimeException {
-		public TestCaseFailure(String displayName, Throwable throwable) {
-			super(displayName, throwable);
-		}
-	}
-
-	public Stream<TestCase> stream() {
-		return getTesters().stream();
+		executeAllTestCases();
 	}
 
 	private abstract class FileTesterTestCase implements TestCase {
