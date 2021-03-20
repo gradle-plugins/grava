@@ -2,6 +2,7 @@ package dev.gradleplugins.grava.testing.util;
 
 import dev.gradleplugins.grava.testing.file.TestNameTestDirectoryProvider;
 import lombok.val;
+import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.internal.project.ProjectInternal;
@@ -10,6 +11,9 @@ import org.gradle.api.provider.ProviderFactory;
 import org.gradle.testfixtures.ProjectBuilder;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -109,6 +113,16 @@ public final class ProjectTestUtils {
 	}
 
 	/**
+	 * Creates a new root project instance for the given project directory.
+	 *
+	 * @param rootDirectory  a project directory for the root project, must not be null
+	 * @return a new {@link Project} instance, never null
+	 */
+	public static Project createRootProject(Path rootDirectory) {
+		return createRootProject(rootDirectory.toFile());
+	}
+
+	/**
 	 * Creates a child project instance with the specified parent project.
 	 * The child project name and directory defaults to {@literal test} and <pre>${parent.projectDir}/test</pre> respectively.
 	 *
@@ -116,10 +130,7 @@ public final class ProjectTestUtils {
 	 * @return a new child {@link Project} instance of the specified parent project, never null
 	 */
 	public static Project createChildProject(Project parent) {
-		return ProjectBuilder
-			.builder()
-			.withParent(parent)
-			.build();
+		return createChildProject(parent, "test");
 	}
 
 	/**
@@ -131,11 +142,7 @@ public final class ProjectTestUtils {
 	 * @return a new child {@link Project} instance of the specified parent project, never null
 	 */
 	public static Project createChildProject(Project parent, String name) {
-		return ProjectBuilder
-			.builder()
-			.withName(name)
-			.withParent(parent)
-			.build();
+		return createChildProject(parent, name, new File(parent.getProjectDir(), name));
 	}
 
 	/**
@@ -151,8 +158,20 @@ public final class ProjectTestUtils {
 			.builder()
 			.withName(name)
 			.withParent(parent)
-			.withProjectDir(projectDirectory)
+			.withProjectDir(toCanonicalFile(projectDirectory))
 			.build();
+	}
+
+	/**
+	 * Creates a child project instance with the specified parent project, name and directory.
+	 *
+	 * @param parent  the parent project for the child project, must not be null
+	 * @param name  the child project name, must not be null
+	 * @param projectDirectory  the child project directory, must not be null
+	 * @return a new child {@link Project} instance of the specified parent project, never null
+	 */
+	public static Project createChildProject(Project parent, String name, Path projectDirectory) {
+		return createChildProject(parent, name, projectDirectory.toFile());
 	}
 
 	/**
@@ -167,5 +186,13 @@ public final class ProjectTestUtils {
 	 */
 	public static Project evaluate(Project project) {
 		return ((ProjectInternal) project).evaluate();
+	}
+
+	private static File toCanonicalFile(File file) {
+		try {
+			return file.getCanonicalFile();
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }
