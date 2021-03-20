@@ -272,7 +272,6 @@ public final class WellBehavedPluginTester {
 			out.println("}");
 			out.println();
 			out.println("gradle.buildFinished {");
-			out.println(" println 'wat'");
 			out.println("    def configuredTaskPaths = configuredTasks*.path");
 			out.println();
 			out.println("    // TODO: Log warning if getRealizedTaskPaths() is different than ':help'");
