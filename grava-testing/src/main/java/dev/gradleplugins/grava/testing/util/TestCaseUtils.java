@@ -11,8 +11,8 @@ public final class TestCaseUtils {
 	 *
 	 * <pre>
 	 * class FooTest {
-	 *     @TestFactory
-	 *     Stream<DynamicTest> checkWellBehavedPlugin() {
+	 *     &#64;TestFactory
+	 *     Stream&#60;DynamicTest&#62; checkWellBehavedPlugin() {
 	 *         return new WellBehavedPluginTester()
 	 *             .pluginType(WellBehavedTestPlugin.class)
 	 *             .qualifiedPluginId("gravatesting.well-behaved-plugin")

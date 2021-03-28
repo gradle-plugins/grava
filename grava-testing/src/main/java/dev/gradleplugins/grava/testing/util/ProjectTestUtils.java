@@ -180,7 +180,8 @@ public final class ProjectTestUtils {
 	 *
 	 * Note: It is generally preferable to write functional test using Gradle Runner Kit to test after evaluate behavior.
 	 *
-	 * @implNote It uses a call to an internal Gradle API, e.g. {@link ProjectInternal#evaluate()}.
+	 * Implementation Note: It uses a call to an internal Gradle API, e.g. {@link ProjectInternal#evaluate()}.
+	 *
 	 * @param project  the project to evaluate, must not be null
 	 * @return the specified project, never null
 	 */
