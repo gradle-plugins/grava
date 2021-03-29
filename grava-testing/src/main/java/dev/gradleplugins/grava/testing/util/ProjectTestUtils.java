@@ -14,8 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class ProjectTestUtils {
 	private static final String CLEANUP_THREAD_NAME = "project-test-utils-cleanup";
 	private static final AtomicBoolean SHUTDOWN_REGISTERED = new AtomicBoolean();
-	private static final List<TestNameTestDirectoryProvider> PROJECT_DIRECTORIES_TO_CLEANUP = Collections.synchronizedList(new ArrayList<>());
+	private static final List<TestNameTestDirectoryProvider> PROJECT_DIRECTORIES_TO_CLEANUP = Collections.synchronizedList(new LinkedList<>());
 	private static Project _use_project_method = null;
 	private ProjectTestUtils() {}
 
