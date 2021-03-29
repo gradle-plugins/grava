@@ -1,11 +1,10 @@
 package dev.gradleplugins.grava.testing.fixtures;
 
 import org.gradle.api.Plugin;
-import org.gradle.api.Project;
 
-public class WellBehavedTestPlugin implements Plugin<Project> {
+public class WellBehavedTestPlugin implements Plugin<Object> {
 	@Override
-	public void apply(Project target) {
+	public void apply(Object target) {
 		// do nothing
 	}
 }

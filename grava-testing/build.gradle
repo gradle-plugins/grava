@@ -7,6 +7,7 @@ description = 'Testing helper classes for Gradle plugin development'
 
 dependencies {
 	implementation gradleRunnerKit()
+	implementation testFixtures(gradleRunnerKit())
 	implementation 'org.hamcrest:hamcrest-core:2.2'
 	compileOnly('org.junit.jupiter:junit-jupiter-api:5.7.1') {
 		because 'DynamicTest usage in TestCaseUtils'
