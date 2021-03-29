@@ -40,7 +40,7 @@ abstract class AbstractTestDirectoryProvider implements TestDirectoryProvider, A
 	private boolean suppressCleanupErrors = false;
 
 	protected AbstractTestDirectoryProvider(Path root, Class<?> testClass) {
-		this.root = root;
+		this.root = root.toAbsolutePath();
 		this.className = shortenPath(testClass.getSimpleName(), 16);
 	}
 
