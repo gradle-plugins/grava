@@ -248,7 +248,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 
 		private GradleRunner configureRunnerPluginDslClasspath(GradleRunner runner) {
 			// TODO: Should this be a feature of Runner Kit
-			if (this.getClass().getResource("plugin-under-test-metadata.properties") == null) {
+			if (Thread.currentThread().getContextClassLoader().getResource("plugin-under-test-metadata.properties") == null) {
 				return runner.withPluginClasspath(Arrays.stream(System.getProperty("java.class.path").split(File.pathSeparator)).map(File::new).collect(toList()));
 			}
 			return runner.withPluginClasspath();
