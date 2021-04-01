@@ -166,16 +166,37 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		executeAllTestCases();
 	}
 
+	private static final boolean LEAVE_WORKSPACE_BEHIND_ON_ERRORS = Boolean.parseBoolean(System.getProperty("dev.gradleplugins.internal.leave-workspace-behind-on-errors", "false"));
 	private abstract class FileTesterTestCase implements TestCase {
 		private final TestNameTestDirectoryProvider testDirectory = TestNameTestDirectoryProvider.newInstance(getDisplayName(), WellBehavedPluginTester.this);
+		private boolean shouldCleanup = true;
 
 		protected Path getWorkingDirectory() {
 			return testDirectory.getTestDirectory();
 		}
 
 		@Override
+		public final void execute() throws Throwable {
+			try {
+				doExecute();
+			} catch (TestAbortedException t) {
+				// check up any aborted tests
+				throw t;
+			} catch (Throwable t) {
+				if (LEAVE_WORKSPACE_BEHIND_ON_ERRORS) {
+					shouldCleanup = false;
+				}
+				throw t;
+			}
+		}
+
+		protected abstract void doExecute() throws Throwable;
+
+		@Override
 		public void tearDown() throws Throwable {
-			testDirectory.cleanup();
+			if (shouldCleanup) {
+				testDirectory.cleanup();
+			}
 		}
 	}
 
@@ -293,7 +314,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			buildScript(target.getBuildScriptName()).append(
 				"assert plugins.withType(Class.forName('" + getPluginTypeUnderTest().getTypeName() + "')).size() == 0",
 				"apply plugin: '" + getQualifiedPluginIdUnderTest() + "'",
@@ -321,7 +342,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			buildScript(target.getBuildScriptName()).append(
 				"apply plugin: '" + getQualifiedPluginIdUnderTest() + "'"
 			);
@@ -347,7 +368,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			buildScript(target.getBuildScriptName()).append(
 				"apply plugin: Class.forName('" + getPluginTypeUnderTest().getTypeName() + "')"
 			);
@@ -371,7 +392,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			buildScript(target.getBuildScriptName()).append(
 				"plugins {",
 				"  id '" + getQualifiedPluginIdUnderTest() + "'",
@@ -400,7 +421,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			// Applies the plugin however possible
 			buildScript(target.getBuildScriptName()).append(appliesPluginToTarget(target));
 
@@ -426,7 +447,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			// Applies the plugin however possible
 			buildScript(target.getBuildScriptName()).append(appliesPluginToTarget(target));
 
@@ -450,7 +471,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			// Applies the plugin however possible
 			buildScript(target.getBuildScriptName()).append(appliesPluginToTarget(target));
 
@@ -486,7 +507,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			// Applies the plugin however possible
 			buildScript(target.getBuildScriptName()).append(appliesPluginToTarget(target));
 
@@ -527,7 +548,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			// Applies the plugin however possible
 			buildScript(target.getBuildScriptName()).append(appliesPluginToTarget(target));
 
@@ -571,7 +592,7 @@ public final class WellBehavedPluginTester extends AbstractTester {
 		}
 
 		@Override
-		public void execute() throws Throwable {
+		public void doExecute() throws Throwable {
 			// Applies the plugin however possible
 			buildScript(target.getBuildScriptName()).append(appliesPluginToTarget(target));
 
