@@ -1,5 +1,6 @@
 package dev.gradleplugins.grava.publish.metadata;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
 import javax.annotation.Nullable;
@@ -144,6 +145,7 @@ public class GradleModuleMetadata {
 	public static class RemoteVariant implements Variant {
 		String name;
 		List<Attribute> attributes;
+		@SerializedName(value = "available-at")
 		@Nullable AvailableAt availableAt;
 		List<Capability> capabilities;
 
