@@ -31,20 +31,7 @@ public final class ProjectTestUtils {
 
 	private static void maybeRegisterCleanup() {
 		if (SHUTDOWN_REGISTERED.compareAndSet(false, true)) {
-			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						synchronized (PROJECT_DIRECTORIES_TO_CLEANUP) {
-							for (TestNameTestDirectoryProvider testDirectory : PROJECT_DIRECTORIES_TO_CLEANUP) {
-								testDirectory.cleanup();
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}, CLEANUP_THREAD_NAME));
+			Runtime.getRuntime().addShutdownHook(new Thread(ProjectTestUtils::cleanup, CLEANUP_THREAD_NAME));
 		}
 	}
 
@@ -194,6 +181,25 @@ public final class ProjectTestUtils {
 			return file.getCanonicalFile();
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
+		}
+	}
+
+	/**
+	 * Force cleanup of the temporary project directories.
+	 */
+	public static void cleanup() {
+		try {
+			synchronized (PROJECT_DIRECTORIES_TO_CLEANUP) {
+				try {
+					for (TestNameTestDirectoryProvider testDirectory : PROJECT_DIRECTORIES_TO_CLEANUP) {
+						testDirectory.cleanup();
+					}
+				} finally {
+					PROJECT_DIRECTORIES_TO_CLEANUP.clear();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
